@@ -1,0 +1,64 @@
+apply plugin: 'java'
+
+group 'com.testframework'
+version '1.0'
+defaultTasks 'clean', 'test'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies { 
+  compile (
+    'io.github.bonigarcia:webdrivermanager:3.0.0',
+    'com.codeborne:selenide:4.14.2',
+    'org.testng:testng:6.14.3',
+    'ru.yandex.qatools.allure:allure-testng-adaptor:1.5.4',
+    'ru.yandex.qatools.htmlelements:htmlelements-java:1.18',
+    'com.automation-remarks:video-recorder-testng:1.+',
+    'org.rendersnake:rendersnake:1.9.0',
+    'commons-collections:commons-collections:3.2.2',
+    'com.google.guava:guava:26.0-jre',
+    'org.apache.logging.log4j:log4j-api:2.11.1',
+    'org.apache.logging.log4j:log4j-core:2.11.1',
+    'org.slf4j:slf4j-simple:1.7.25',
+    'org.yaml:snakeyaml:1.23',
+    'org.jsoup:jsoup:1.11.3',
+    'javax.mail:mail:1.5.0-b01'
+  )
+  testCompile (
+    'io.github.bonigarcia:webdrivermanager:3.0.0',
+    'com.codeborne:selenide:4.14.2',
+    'org.testng:testng:6.14.3',
+    'ru.yandex.qatools.allure:allure-testng-adaptor:1.5.4',
+    'ru.yandex.qatools.htmlelements:htmlelements-java:1.18',
+    'com.automation-remarks:video-recorder-testng:1.+',
+    'org.rendersnake:rendersnake:1.9.0',
+    'commons-collections:commons-collections:3.2.2',
+    'com.google.guava:guava:26.0-jre',
+    'org.apache.logging.log4j:log4j-api:2.11.1',
+    'org.apache.logging.log4j:log4j-core:2.11.1',
+    'org.slf4j:slf4j-simple:1.7.25',
+    'org.yaml:snakeyaml:1.23',
+    'org.jsoup:jsoup:1.11.3',
+    'javax.mail:mail:1.5.0-b01'
+  )
+}
+
+
+test {
+    useTestNG()
+
+    //Show full exception on failure
+    testLogging {
+        exceptionFormat = 'full'
+    }
+
+    //Convenience .. pipe all test results to SDOUT
+    afterTest { desc, result ->
+        println "${desc.className} ${desc.name} ${result.resultType}"
+    }
+
+    //Force tests to always run, even if they haven't been updated
+    outputs.upToDateWhen { false }
+}
