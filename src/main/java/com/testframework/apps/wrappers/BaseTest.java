@@ -181,7 +181,7 @@ public abstract class BaseTest implements TestCase {
     public static void createAllureProperties() {
         AllurePropertiesUtil.create();
     }
-
+    
 }
 
 

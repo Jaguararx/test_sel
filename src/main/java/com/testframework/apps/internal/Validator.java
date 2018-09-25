@@ -4,14 +4,19 @@ import com.testframework.apps.wrappers.BaseTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.yandex.qatools.allure.annotations.Step;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SelenideElement;
 
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import static com.testframework.apps.utils.report.AllureReport.htmlToAllureReport;
 import static com.testframework.apps.utils.report.AllureReport.textToAllureAsStep;
 import static java.lang.String.format;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
 
 public interface Validator {
 
@@ -52,12 +57,58 @@ public interface Validator {
         assertEquals(actual, expected);
     }
 
+    @Step("Verify that {1} = {0}")
+    default void verifyIntEquals(final Integer actual, final Integer expected) {
+        textToAllureAsStep("Actual", actual.toString());
+        textToAllureAsStep("Expected", expected.toString());
+        assertEquals(actual, expected);
+    }
+
+    @Step("Verify that {0} > {1}")
+    default void verifyIntGreater(final Integer int1, final Integer int2) {
+        textToAllureAsStep("Integer 1", int1.toString());
+        textToAllureAsStep("Integer 2", int2.toString());
+        assertTrue(int1>int2);
+    }
+    
+    @Step("Verify that Date {1} = Date {0}")
+    default void verifyDateEquals(final Date actual, final Date expected) {
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        textToAllureAsStep("Actual", df.format(actual));
+        textToAllureAsStep("Expected", df.format(expected));
+        assertEquals(actual.compareTo(expected), 0);
+    }
+
     @Step("Verify that \"{0}\" contains \"{1}\"")
     default void verifyTextContains(final String actual, final String containsString) {
         htmlToAllureReport("Actual: "+actual+"<br><br>Contains string: "+containsString);
         assertTrue(actual.contains(containsString));
     }
 
+    @Step("Verify that {0} exists")
+    default void verifyElementExists(final SelenideElement element) {
+        textToAllureAsStep("Element locator: ",element.getSearchCriteria());
+        assertTrue(element.exists());
+    }
+    
+    @Step("Verify that {0} not exists")
+    default void verifyElementNotExists(final SelenideElement element) {
+        textToAllureAsStep("Element locator: ",element.getSearchCriteria());
+        assertFalse(element.exists());
+    }
+    
+    @Step("Verify that {0} visible")
+    default void verifyElementVisible(final SelenideElement element) {
+        textToAllureAsStep("Element locator: ",element.getSearchCriteria());
+        assertTrue(element.isDisplayed());
+    }
+    
+    @Step("Verify that {0} not visible")
+    default void verifyElementNotVisible(final SelenideElement element) {
+        textToAllureAsStep("Element locator: ",element.getSearchCriteria());
+        assertFalse(element.isDisplayed());
+    }
+    
     @Step("Verify that url \"{0}\" contains \"{1}\"")
     default void verifyUrlContains(final String actual, final String containsString) {
         textToAllureAsStep("Actual", actual);

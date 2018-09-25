@@ -8,7 +8,12 @@ repositories {
   mavenCentral()
 }
 
+configurations {
+    agent
+}
+
 dependencies { 
+  agent "org.aspectj:aspectjweaver:1.9.1"
   compile (
     'io.github.bonigarcia:webdrivermanager:3.0.0',
     'com.codeborne:selenide:4.14.2',
@@ -24,6 +29,7 @@ dependencies {
     'org.slf4j:slf4j-simple:1.7.25',
     'org.yaml:snakeyaml:1.23',
     'org.jsoup:jsoup:1.11.3',
+    'org.seleniumhq.selenium:selenium-chrome-driver:2.23.0',
     'javax.mail:mail:1.5.0-b01'
   )
   testCompile (
@@ -41,10 +47,15 @@ dependencies {
     'org.slf4j:slf4j-simple:1.7.25',
     'org.yaml:snakeyaml:1.23',
     'org.jsoup:jsoup:1.11.3',
+    'org.seleniumhq.selenium:selenium-chrome-driver:2.23.0',
     'javax.mail:mail:1.5.0-b01'
   )
 }
 
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
+}
 
 test {
     useTestNG()
